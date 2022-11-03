@@ -1,0 +1,52 @@
+name: 
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 
+      - name: 
+        run:
+    
+  DeployDev:
+    name: Deploy to Dev 
+    if: 
+    needs: [Build]
+    runs-on: 
+    environment: 
+      name: 
+      url: 
+    steps:
+      - name: 
+        run: 
+     
+  DeployStaging:
+    name: Deploy to Staging 
+    if: 
+    needs: [Build]
+    runs-on: 
+    environment: 
+      name: 
+      url: 
+    steps:
+      - name: 
+        run: 
+            
+  DeployProd:
+    name: Deploy to Production 
+    needs: 
+    runs-on: 
+    environment: 
+      name: 
+      url: 
+    steps:
+      - name: 
+        run:  
+   
