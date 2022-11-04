@@ -1,41 +1,91 @@
-name: Approval based pipeline
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
-jobs:
-  Build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Compile
-        run: echo Hello, world!
-  DeployDev:
-    name: Deploy to Dev
-    needs: [Build]
-    runs-on: ubuntu-latest
-    environment:
-      name: Development
-    steps:
-      - name: Deploy
-        run: echo I am deploying!
-  DeployStaging:
-    name: Deploy to Staging
-    needs: [Build]
-    runs-on: ubuntu-latest
-    environment:
-      name: Staging
-    steps:
-      - name: Deploy
-        run: echo I am deploying!
-  DeployProd:
-    name: Deploy to Production
-    needs: [DeployStaging]
-    runs-on: ubuntu-latest
-    environment:
-      name: Production
-    steps:
-      - name: Deploy
-        run: echo I am deploying!
+{
+    "pipeline": {
+        "name": "",
+        "roleArn": "",
+        "artifactStore": {
+            "type": "",
+            "location": ""
+        },
+        "stages": [
+            {
+                "name": "Source",
+                "actions": [
+                    {
+                        "name": "Source",
+                        "actionTypeId": {
+                            "category": "Source",
+                            "owner": "AWS",
+                            "provider": "CodeStarSourceConnection",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "BranchName": "",
+                            "ConnectionArn": "",
+                            "FullRepositoryId": "",
+                            "OutputArtifactFormat": ""
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "inputArtifacts": []
+                    }
+                ]
+            },
+            {
+                "name": "Build",
+                "actions": [
+                    {
+                        "name": "Build",
+                        "actionTypeId": {
+                            "category": "Build",
+                            "owner": "AWS",
+                            "provider": "CodeBuild",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "ProjectName": ""
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "BuildArtifact"
+                            }
+                        ],
+                        "inputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ]
+                    }
+                ]
+            },
+          {
+    "Name": "Deploy",
+    "Actions": [
+        {
+            "Name": "Deploy",
+            "ActionTypeId": {
+                "Category": "Deploy",
+                "Owner": "AWS",
+                "Provider": "CodeDeploy",
+                "Version": "1"
+            },
+            "RunOrder": 1,
+            "Configuration": {
+                "ApplicationName": "my-application",
+                "DeploymentGroupName": "my-deployment-group"
+            },
+            "OutputArtifacts": [],
+            "InputArtifacts": [
+                {
+                    "Name": "SourceArtifact"
+                }
+            ],
+            "Region": "us-west-2",
+            "Namespace": "DeployVariables"
+        }
+    ]
+},
