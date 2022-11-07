@@ -16,4 +16,4 @@ commands:
 - echo build completed on 'date'
 artifacts:
 files:
-- 'target/ccdemo.war'
+- target/messageUtil-1.0.jar
